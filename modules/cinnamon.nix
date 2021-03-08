@@ -103,13 +103,13 @@ in
       networking.networkmanager.enable = mkDefault true;
 
       # Enable colord server
-      services.colord.enable = true;
+###      services.colord.enable = true;
 
       # Enable dconf
       programs.dconf.enable = true;
 
       # Enable org.a11y.Bus
-      services.gnome3.at-spi2-core.enable = true;
+###      services.gnome3.at-spi2-core.enable = true;
 
       # Fix lockscreen
       security.pam.services = {
