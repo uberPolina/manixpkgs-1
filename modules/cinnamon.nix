@@ -57,9 +57,9 @@ in
   };
 
   config = mkMerge [
-    (mkIf (cfg.enable && config.services.xserver.displayManager.lightdm.enable && config.services.xserver.displayManager.lightdm.greeters.gtk.enable) {
-      services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = mkDefault (builtins.readFile "${pkgs.cinnamon.mint-artwork}/etc/lightdm/lightdm-gtk-greeter.conf.d/99_linuxmint.conf");
-      })
+###    (mkIf (cfg.enable && config.services.xserver.displayManager.lightdm.enable && config.services.xserver.displayManager.lightdm.greeters.gtk.enable) {
+###      services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = mkDefault (builtins.readFile "${pkgs.cinnamon.mint-artwork}/etc/lightdm/lightdm-gtk-greeter.conf.d/99_linuxmint.conf");
+###      })
 
     (mkIf cfg.enable {
       services.xserver.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
