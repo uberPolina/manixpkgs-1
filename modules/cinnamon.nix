@@ -57,28 +57,28 @@ in
   };
 
   config = mkMerge [
-###    (mkIf (cfg.enable && config.services.xserver.displayManager.lightdm.enable && config.services.xserver.displayManager.lightdm.greeters.gtk.enable) {
-###      services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = mkDefault (builtins.readFile "${pkgs.cinnamon.mint-artwork}/etc/lightdm/lightdm-gtk-greeter.conf.d/99_linuxmint.conf");
-###      })
+    (mkIf (cfg.enable && config.services.xserver.displayManager.lightdm.enable && config.services.xserver.displayManager.lightdm.greeters.gtk.enable) {
+      services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = mkDefault (builtins.readFile "${pkgs.cinnamon.mint-artwork}/etc/lightdm/lightdm-gtk-greeter.conf.d/99_linuxmint.conf");
+      })
 
     (mkIf cfg.enable {
-###      services.xserver.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
+      services.xserver.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
 
-###      services.xserver.displayManager.sessionCommands = ''
-###        if test "$XDG_CURRENT_DESKTOP" = "Cinnamon"; then
-###            true
-###            ${concatMapStrings (p: ''
-###              if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
-###                export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
-###              fi
+      services.xserver.displayManager.sessionCommands = ''
+        if test "$XDG_CURRENT_DESKTOP" = "Cinnamon"; then
+            true
+            ${concatMapStrings (p: ''
+              if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
+                export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+              fi
 
-###              if [ -d "${p}/lib/girepository-1.0" ]; then
-###                export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
-###                export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
-###              fi
-###            '') cfg.sessionPath}
-###        fi
-###      '';
+              if [ -d "${p}/lib/girepository-1.0" ]; then
+                export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
+                export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+              fi
+            '') cfg.sessionPath}
+        fi
+      '';
 
       # Default services
 ###      hardware.bluetooth.enable = mkDefault true;
