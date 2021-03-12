@@ -10,5 +10,6 @@
 
 {
   foliate = pkgs.callPackage ./pkgs/foliate { };
+  telegram = pkgs.callPackage ./pkgs/telegram { };
 }
 
