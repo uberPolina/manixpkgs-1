@@ -44,7 +44,10 @@ in mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake ninja python3 wrapGAppsHook wrapQtAppsHook removeReferencesTo ];
 
   buildInputs = [
-    qtbase qtimageformats gtk3 libsForQt5.libdbusmenu enchant2 lz4 xxHash
+    # qtbase qtimageformats
+    gtk3
+    #libsForQt5.libdbusmenu
+    enchant2 lz4 xxHash
     dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
     tl-expected hunspell
     tg_owt
