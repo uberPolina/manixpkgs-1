@@ -174,8 +174,8 @@ in
 
       # Harmonize Qt5 applications under Pantheon
       qt5.enable = true;
-      qt5.platformTheme = "gtk2";
-      qt5.style = "gtk2";
+      qt5.platformTheme = "gnome";
+      qt5.style = "adwaita";
 
       # Default Fonts
 ###      fonts.fonts = with pkgs; [
