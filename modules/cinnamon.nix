@@ -190,7 +190,7 @@ in
     (mkIf serviceCfg.apps.enable {
       # programs.geary.enable = mkDefault true;
       programs.gnome-disks.enable = mkDefault true;
-      # programs.gnome-terminal.enable = mkDefault true;
+      programs.gnome-terminal.enable = mkDefault true;
       # programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
 
