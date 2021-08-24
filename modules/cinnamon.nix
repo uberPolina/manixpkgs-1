@@ -25,11 +25,11 @@ in
 
       sessionPath = mkOption {
         default = [];
-        example = literalExample "[ pkgs.gnome3.gpaste ]";
+        type = types.listOf types.package;
+        example = literalExample "[ pkgs.gnome.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
-
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
       };
@@ -57,9 +57,9 @@ in
   };
 
   config = mkMerge [
-###    (mkIf (cfg.enable && config.services.xserver.displayManager.lightdm.enable && config.services.xserver.displayManager.lightdm.greeters.gtk.enable) {
-###      services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = mkDefault (builtins.readFile "${pkgs.cinnamon.mint-artwork}/etc/lightdm/lightdm-gtk-greeter.conf.d/99_linuxmint.conf");
-###      })
+    (mkIf (cfg.enable && config.services.xserver.displayManager.lightdm.enable && config.services.xserver.displayManager.lightdm.greeters.gtk.enable) {
+      services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = mkDefault (builtins.readFile "${pkgs.cinnamon.mint-artwork}/etc/lightdm/lightdm-gtk-greeter.conf.d/99_linuxmint.conf");
+      })
 
     (mkIf cfg.enable {
       services.xserver.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
@@ -71,7 +71,6 @@ in
               if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
                 export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
               fi
-
               if [ -d "${p}/lib/girepository-1.0" ]; then
                 export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
                 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
@@ -81,20 +80,20 @@ in
       '';
 
       # Default services
-###      hardware.bluetooth.enable = mkDefault true;
+      hardware.bluetooth.enable = mkDefault true;
       hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
-###      services.accounts-daemon.enable = true;
-###      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+      services.accounts-daemon.enable = true;
+      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs.cinnamon; [
         cinnamon-common
         cinnamon-screensaver
-###        nemo
+        nemo
         xapps
       ];
       services.cinnamon.apps.enable = mkDefault true;
-      services.gnome3.glib-networking.enable = true;
-###      services.gnome3.gnome-keyring.enable = true;
+      services.gnome.glib-networking.enable = true;
+      # services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
       services.udisks2.enable = true;
       services.upower.enable = mkDefault config.powerManagement.enable;
@@ -103,13 +102,13 @@ in
       networking.networkmanager.enable = mkDefault true;
 
       # Enable colord server
-###      services.colord.enable = true;
+      services.colord.enable = true;
 
       # Enable dconf
       programs.dconf.enable = true;
 
       # Enable org.a11y.Bus
-###      services.gnome3.at-spi2-core.enable = true;
+      services.gnome.at-spi2-core.enable = true;
 
       # Fix lockscreen
       security.pam.services = {
@@ -117,9 +116,9 @@ in
       };
 
       environment.systemPackages = with pkgs.cinnamon // pkgs; [
-###        desktop-file-utils
-###        nixos-artwork.wallpapers.simple-dark-gray
-###        onboard
+        desktop-file-utils
+        # nixos-artwork.wallpapers.simple-dark-gray
+        # onboard
         sound-theme-freedesktop
 
         # common-files
@@ -127,6 +126,7 @@ in
         cinnamon-session
         cinnamon-desktop
         cinnamon-menus
+        cinnamon-translations
 
         # utils needed by some scripts
         killall
@@ -134,30 +134,33 @@ in
         # session requirements
         cinnamon-screensaver
         # cinnamon-killer-daemon: provided by cinnamon-common
-        gnome3.networkmanagerapplet # session requirement - also nm-applet not needed
+        gnome.networkmanagerapplet # session requirement - also nm-applet not needed
+
+        # For a polkit authentication agent
+        polkit_gnome
 
         # packages
         nemo
         cinnamon-control-center
         cinnamon-settings-daemon
-        gnome3.libgnomekbd
-###        orca
+        gnome.libgnomekbd
+        # orca
 
         # theme
-###        gnome3.adwaita-icon-theme
-###        hicolor-icon-theme
-###        gnome3.gnome-themes-extra
-###        gtk3.out
-###        mint-artwork
-###        mint-themes
-###        mint-x-icons
-###        mint-y-icons
-###        vanilla-dmz
+        gnome.adwaita-icon-theme
+        hicolor-icon-theme
+        gnome.gnome-themes-extra
+        gtk3.out
+        # mint-artwork
+        # mint-themes
+        # mint-x-icons
+        # mint-y-icons
+        # vanilla-dmz
 
         # other
         glib # for gsettings
-        shared-mime-info # for update-mime-database
-###        xdg-user-dirs
+        # shared-mime-info # for update-mime-database
+        # xdg-user-dirs
       ];
 
       # Override GSettings schemas
@@ -178,28 +181,29 @@ in
       qt5.style = "adwaita";
 
       # Default Fonts
-###      fonts.fonts = with pkgs; [
-###        source-code-pro # Default monospace font in 3.32
-###        ubuntu_font_family # required for default theme
-###      ];
+      fonts.fonts = with pkgs; [
+        source-code-pro # Default monospace font in 3.32
+        ubuntu_font_family # required for default theme
+      ];
     })
 
     (mkIf serviceCfg.apps.enable {
-###      programs.geary.enable = mkDefault true;
-###      programs.gnome-disks.enable = mkDefault true;
-###      programs.gnome-terminal.enable = mkDefault true;
-###      programs.evince.enable = mkDefault true;
+      # programs.geary.enable = mkDefault true;
+      programs.gnome-disks.enable = mkDefault true;
+      # programs.gnome-terminal.enable = mkDefault true;
+      # programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
 
-###      environment.systemPackages = (with pkgs // pkgs.gnome3 // pkgs.cinnamon; pkgs.gnome3.removePackagesByName [
+      environment.systemPackages = (with pkgs // pkgs.gnome // pkgs.cinnamon; pkgs.gnome.removePackagesByName [
         # cinnamon team apps
-###        blueberry
-###        warpinator
+        bulky
+        blueberry
+        # warpinator
 
         # external apps shipped with linux-mint
-###        hexchat
-###        gnome-calculator
-###      ] config.environment.cinnamon.excludePackages);
+        # hexchat
+        # gnome-calculator
+      ] config.environment.cinnamon.excludePackages);
     })
   ];
 }
